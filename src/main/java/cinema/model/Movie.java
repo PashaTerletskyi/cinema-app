@@ -1,26 +1,18 @@
 package cinema.model;
 
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 @Entity
-@Table(name = "movies")
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String description;
-
-    public Movie() {
-    }
-
-    public Movie(String title) {
-        this.title = title;
-    }
 
     public Long getId() {
         return id;
@@ -48,8 +40,29 @@ public class Movie {
 
     @Override
     public String toString() {
-        return "Movie{" + "id=" + id
+        return "Movie{"
+                + "id=" + id
                 + ", title='" + title + '\''
-                + ", description='" + description + '\'' + '}';
+                + ", description='" + description
+                + '\'' + '}';
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+        Movie movie = (Movie) object;
+        return Objects.equals(id, movie.id)
+                && Objects.equals(title, movie.title)
+                && Objects.equals(description, movie.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, description);
     }
 }
