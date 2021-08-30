@@ -1,14 +1,15 @@
 package cinema.model;
 
+import java.util.Objects;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.ManyToMany;
 
 @Entity
-@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +17,8 @@ public class User {
     @Column(unique = true)
     private String email;
     private String password;
-    private byte[] salt;
+    @ManyToMany
+    private Set<Role> roles;
 
     public Long getId() {
         return id;
@@ -42,16 +44,39 @@ public class User {
         this.password = password;
     }
 
-    public byte[] getSalt() {
-        return salt;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setSalt(byte[] salt) {
-        this.salt = salt;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", email='" + email + '\'' + '}';
+        return "User{"
+                + "id=" + id
+                + ", email='" + email + '\''
+                + ", roles=" + roles + '}';
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+        User user = (User) object;
+        return Objects.equals(id, user.id)
+                && Objects.equals(email, user.email)
+                && Objects.equals(password, user.password)
+                && Objects.equals(roles, user.roles);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, password, roles);
     }
 }
